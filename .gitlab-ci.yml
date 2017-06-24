@@ -29,8 +29,6 @@ deploy_dev:
  - gem install dpl
  - dpl --provider=heroku --app=capp-ci-api-dev --api-key=2c08c676-66ca-40ac-a757-33849bced7a8
  environment:
- name: dev
- url: https://capp-ci-api-dev.herokuapp.com
  only:
  - master
  tags:
@@ -45,8 +43,6 @@ deploy_staging:
  - gem install dpl
  - dpl --provider=heroku --app=capp-ci-api-stg --api-key=2c08c676-66ca-40ac-a757-33849bced7a8
  environment:
- name: staging
- url: https://capp-ci-api-stg.herokuapp.com
  only:
  - master
  tags:
