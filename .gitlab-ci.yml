@@ -1,0 +1,53 @@
+before_script:
+ - echo "Execute scripts which are required to bootstrap the application. !"
+
+after_script:
+ - echo "Clean up activity can be done here !."
+ 
+cache:
+ paths:
+ - /root/.m2/repository
+ 
+stages:
+ - build
+ - deploy
+
+build:
+ stage: build
+ image: maven:3.3.9-jdk-8
+ script:
+ - mvn clean package
+ tags:
+ - docker
+ 
+deploy_dev:
+ stage: deploy
+ image: ruby:2.3
+ script:
+ - apt-get update -qy
+ - apt-get install -y ruby-dev
+ - gem install dpl
+ - dpl --provider=heroku --app=capp-ci-api-dev --api-key=2c08c676-66ca-40ac-a757-33849bced7a8
+ environment:
+ name: dev
+ url: https://capp-ci-api-dev.herokuapp.com
+ only:
+ - master
+ tags:
+ - docker
+ 
+deploy_staging:
+ stage: deploy
+ image: ruby:2.3
+ script:
+ - apt-get update -qy
+ - apt-get install -y ruby-dev
+ - gem install dpl
+ - dpl --provider=heroku --app=capp-ci-api-stg --api-key=2c08c676-66ca-40ac-a757-33849bced7a8
+ environment:
+ name: staging
+ url: https://capp-ci-api-stg.herokuapp.com
+ only:
+ - master
+ tags:
+ - docker
